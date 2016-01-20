@@ -1,0 +1,12 @@
+# ignore various IDE project files and folders
+.ftpconfig
+.idea/
+.buildpath
+.project
+.settings/
+nbproject/
+
+# ignore mac files
+.DS_Store
+
+config.core.php

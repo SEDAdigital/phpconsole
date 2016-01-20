@@ -1,0 +1,4 @@
+++ phpconsole 0.1.0
+++ Released on 2016-01-20
++++++++++++++++++++++++++
+- Initial ALPHA release

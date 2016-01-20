@@ -18,11 +18,18 @@ class phpconsoleX {
         // load config
         $this->config = new \Phpconsole\Config;
         
-        if (file_exists(MODX_CORE_PATH.'config/phpconsole-config.inc.php')) {
-            // load config file
+        $configSetting = $modx->fromJSON($modx->getOption('phpconsole.config', null, ''));
+        
+        if (!empty($configSetting)) {
+            // load config from system setting
+            $this->config->loadFromArray($configSetting);
+            
+        } else if (file_exists(MODX_CORE_PATH.'config/phpconsole-config.inc.php')) {
+            // load config from file
             $this->config->loadFromLocation(MODX_CORE_PATH.'config/phpconsole-config.inc.php');
+            
         } else {
-            // if no config file exists, switch back to the FILE logTarget
+            // if no config exists, switch back to the FILE logTarget
             $this->modx->setLogTarget('FILE');
             return false;
         }

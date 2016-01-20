@@ -1,0 +1,1 @@
+This extra integrates phpconsole into the MODX CMS. You will see all $modx->log() calls in phpconsole instead of the default error log. You can also use $modx->phpconsole->send($anything) to send any data to phpconsole. You can even log XPDOObjects with phpconsoleX, since they are automatically converted to an array.

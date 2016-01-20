@@ -3,7 +3,7 @@ This extra integrates [phpconsole](http://phpconsole.com/) into the (MODX)[http:
 
 
 ## Configuration
-You can either use the system setting `phpconsole.config` for the configuration of phpconsole or you can save your configuration into a `phpconsole-config.inc.php` file into your MODX config folder.
+You can either use the system setting `phpconsole.config` (JSON string) for the configuration of phpconsole or you can save your configuration into a `phpconsole-config.inc.php` file (PHP array) into your MODX config folder.
 This is a basic JSON configration for your `phpconsole.config` system setting:
 ```
 {

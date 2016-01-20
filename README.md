@@ -3,7 +3,22 @@ This extra integrates [phpconsole](http://phpconsole.com/) into the (MODX)[http:
 
 
 ## Configuration
-You can either use the system setting `phpconsolex.config` for the configuration of phpconsole or you can save your configuration into a `phpconsole-config.inc.php` file into your MODX config folder. For more information about the configuration please follow the phpconsole docs: https://github.com/phpconsole/phpconsole/blob/master/CONFIGURATION.md
+You can either use the system setting `phpconsole.config` for the configuration of phpconsole or you can save your configuration into a `phpconsole-config.inc.php` file into your MODX config folder.
+This is a basic JSON configration for your `phpconsole.config` system setting:
+```
+{
+    "debug": "false",
+    "defaultProject": "default",
+    "projects": {
+        "default": {
+            "apiKey": "your-api-key-here",
+            "encryptionPassword": "optional-end-to-end-encryption-password"
+        }
+    },
+    "backtraceDepth": "3"
+}
+```
+For more information about the configuration please follow the phpconsole docs: https://github.com/phpconsole/phpconsole/blob/master/CONFIGURATION.md
 
 ## Installation
 You can install phpconsoleX via the MODX Package Manager. Make sure to update the configuration after the installation – you need to add your api key!

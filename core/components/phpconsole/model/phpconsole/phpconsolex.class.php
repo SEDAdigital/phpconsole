@@ -96,8 +96,8 @@ if (!function_exists('phpconsoleFatalLogger')) {
         $error = error_get_last();
         // fatal error, E_ERROR === 1
         if ($error['type'] === E_ERROR && isset($modx->phpconsole)) {
-            $modx->getOption('phpconsole.project', null, 'default');
-            $modx->phpconsole->send($error, array('project' => $environment, 'type' => 'error'));
+            $project = $modx->getOption('phpconsole.project', null, 'default');
+            $modx->phpconsole->send($error, array('project' => $project, 'type' => 'error'));
         } 
     }
 }

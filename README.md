@@ -7,7 +7,7 @@ You can either use the system setting `phpconsole.config` (JSON string) for the 
 This is a basic JSON configration for your `phpconsole.config` system setting:
 ```
 {
-    "debug": "false",
+    "debug": 0,
     "defaultProject": "default",
     "projects": {
         "default": {
@@ -15,7 +15,7 @@ This is a basic JSON configration for your `phpconsole.config` system setting:
             "encryptionPassword": "optional-end-to-end-encryption-password"
         }
     },
-    "backtraceDepth": "3"
+    "backtraceDepth": 3
 }
 ```
 For more information about the configuration please follow the phpconsole docs: https://github.com/phpconsole/phpconsole/blob/master/CONFIGURATION.md

@@ -1,3 +1,9 @@
+++ phpconsole 0.2.0
+++ Released on 2016-01-27
++++++++++++++++++++++++++
+- Update phpconsole to support metadata (shows correct file and linenumber in phpconsole)
+
+
 ++ phpconsole 0.1.0
 ++ Released on 2016-01-20
 +++++++++++++++++++++++++

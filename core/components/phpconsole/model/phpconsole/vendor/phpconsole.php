@@ -9,7 +9,7 @@
  * @link https://github.com/phpconsole
  * @copyright Copyright (c) 2012 - 2014 phpconsole.com
  * @license See LICENSE file
- * @version 3.3.0
+ * @version 3.4.0
  */
 
 
@@ -83,7 +83,7 @@ namespace Phpconsole
         public $apiAddress       = 'https://app.phpconsole.com/api/0.3/';
         public $defaultProject   = 'none';
         public $projects         = array();
-        public $backtraceDepth   = 2;
+        public $backtraceDepth   = 3;
         public $isContextEnabled = true;
         public $contextSize      = 10;
         public $captureWith      = 'print_r';
@@ -645,12 +645,12 @@ namespace Phpconsole
     {
         protected static $phpconsole = null;
 
-        public static function send($payload, $options = array())
+        public static function send($payload, $options = array(), $metadata = array())
         {
-            return self::getPhpconsole()->send($payload, $options);
+            return self::getPhpconsole()->send($payload, $options, $metadata);
         }
 
-        public static function success($payload, $options = array())
+        public static function success($payload, $options = array(), $metadata = array())
         {
             if (is_string($options)) {
                 $options = array('project' => $options);
@@ -658,10 +658,10 @@ namespace Phpconsole
 
             $options = array_merge(array('type' => 'success'), $options);
 
-            return self::getPhpconsole()->send($payload, $options);
+            return self::getPhpconsole()->send($payload, $options, $metadata);
         }
 
-        public static function info($payload, $options = array())
+        public static function info($payload, $options = array(), $metadata = array())
         {
             if (is_string($options)) {
                 $options = array('project' => $options);
@@ -669,10 +669,10 @@ namespace Phpconsole
 
             $options = array_merge(array('type' => 'info'), $options);
 
-            return self::getPhpconsole()->send($payload, $options);
+            return self::getPhpconsole()->send($payload, $options, $metadata);
         }
 
-        public static function error($payload, $options = array())
+        public static function error($payload, $options = array(), $metadata = array())
         {
             if (is_string($options)) {
                 $options = array('project' => $options);
@@ -680,12 +680,12 @@ namespace Phpconsole
 
             $options = array_merge(array('type' => 'error'), $options);
 
-            return self::getPhpconsole()->send($payload, $options);
+            return self::getPhpconsole()->send($payload, $options, $metadata);
         }
 
-        public static function sendToAll($payload, $options = array())
+        public static function sendToAll($payload, $options = array(), $metadata = array())
         {
-            return self::getPhpconsole()->sendToAll($payload, $options);
+            return self::getPhpconsole()->sendToAll($payload, $options, $metadata);
         }
 
         protected static function getPhpconsole()
@@ -706,8 +706,8 @@ namespace Phpconsole
 
     class Phpconsole implements LoggerInterface
     {
-        const TYPE    = 'php-standalone';
-        const VERSION = '3.3.0';
+        const TYPE    = 'php-composer';
+        const VERSION = '3.4.0';
 
         protected $config;
         protected $queue;
@@ -733,13 +733,13 @@ namespace Phpconsole
             }
         }
 
-        public function send($payload, $options = array())
+        public function send($payload, $options = array(), $metadata = array())
         {
             $snippet = $this->snippetFactory->create();
 
             $snippet->setOptions($options);
             $snippet->setPayload($payload);
-            $snippet->setMetadata();
+            $snippet->setMetadata($metadata);
             $snippet->encrypt();
 
             $this->queue->add($snippet);
@@ -747,7 +747,7 @@ namespace Phpconsole
             return $payload;
         }
 
-        public function sendToAll($payload, $options = array())
+        public function sendToAll($payload, $options = array(), $metadata = array())
         {
             $this->config->backtraceDepth++;
 
@@ -758,7 +758,7 @@ namespace Phpconsole
 
                     $options = array_merge($options, array('project' => $name));
 
-                    $this->send($payload, $options);
+                    $this->send($payload, $options, $metadata);
                 }
             }
 
@@ -878,18 +878,15 @@ namespace Phpconsole
             $this->projectApiKey = $this->config->getApiKeyFor($this->project);
         }
 
-        public function setMetadata()
+        public function setMetadata($metadata = array())
         {
-            $bt               = $this->metadataWrapper->debugBacktrace();
-            $backtraceDepth   = $this->config->backtraceDepth;
-            $fileName         = $bt[$backtraceDepth]['file'];
-            $lineNumber       = $bt[$backtraceDepth]['line'];
+            $metadata = $this->prepareMetadata($metadata);
 
-            $this->fileName   = base64_encode($fileName);
-            $this->lineNumber = base64_encode($lineNumber);
-            $this->context    = base64_encode($this->readContext($fileName, $lineNumber));
-            $this->address    = base64_encode($this->currentPageAddress());
-            $this->hostname   = base64_encode($this->metadataWrapper->gethostname());
+            $this->fileName   = base64_encode($metadata['fileName']);
+            $this->lineNumber = base64_encode($metadata['lineNumber']);
+            $this->context    = base64_encode($metadata['context']);
+            $this->address    = base64_encode($metadata['address']);
+            $this->hostname   = base64_encode($metadata['hostname']);
 
             $this->log('Metadata set for snippets');
         }
@@ -970,6 +967,34 @@ namespace Phpconsole
             $this->log('Options prepared for snippet');
 
             return $options;
+        }
+
+        protected function prepareMetadata($metadata)
+        {
+            $backtrace = $this->metadataWrapper->debugBacktrace();
+            $depth     = $this->config->backtraceDepth;
+
+            if (!isset($metadata['fileName'])) {
+                $metadata['fileName'] = $backtrace[$depth]['file'];
+            }
+
+            if (!isset($metadata['lineNumber'])) {
+                $metadata['lineNumber'] = $backtrace[$depth]['line'];
+            }
+
+            if (!isset($metadata['context'])) {
+                $metadata['context'] = $this->readContext($metadata['fileName'], $metadata['lineNumber']);
+            }
+
+            if (!isset($metadata['address'])) {
+                $metadata['address'] = $this->currentPageAddress();
+            }
+
+            if (!isset($metadata['hostname'])) {
+                $metadata['hostname'] = $this->metadataWrapper->gethostname();
+            }
+
+            return $metadata;
         }
 
         protected function replaceTrueFalseNull($input)

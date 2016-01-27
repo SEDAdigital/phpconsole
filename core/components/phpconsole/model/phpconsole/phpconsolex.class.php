@@ -74,7 +74,12 @@ class phpconsoleX {
         } else {
             // call send method of phpconsole
             try {
-                $this->phpconsole->send($payload, $options);
+                $metadata = array();
+                if (isset($payload['file']) && isset($payload['line'])) {
+                    $metadata['fileName'] = str_replace('@ ', '', $payload['file']);
+                    $metadata['lineNumber'] = $payload['line'];
+                }
+                $this->phpconsole->send($payload, $options, $metadata);
             } catch (Exception $e) {
                 if ($this->modx->getCacheManager()) {
                     $filename = isset($targetOptions['filename']) ? $targetOptions['filename'] : 'error.log';

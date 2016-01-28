@@ -22,7 +22,7 @@ set_time_limit(0);
 /* define package */
 define('PKG_NAME','phpconsole');
 define('PKG_NAME_LOWER',strtolower(PKG_NAME));
-define('PKG_VERSION','0.2.0');
+define('PKG_VERSION','0.3.0');
 define('PKG_RELEASE','beta');
 
 $root = dirname(dirname(__FILE__)).'/';

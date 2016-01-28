@@ -3,6 +3,7 @@
 $s = array(
     'config' => '{}',
     'project' => 'default'
+    'enabled' => true
 );
 
 $settings = array();

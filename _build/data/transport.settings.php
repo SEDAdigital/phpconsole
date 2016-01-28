@@ -2,7 +2,7 @@
     
 $s = array(
     'config' => '{}',
-    'project' => 'default'
+    'project' => 'default',
     'enabled' => true
 );
 

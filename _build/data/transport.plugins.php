@@ -16,6 +16,12 @@ $events['OnWebPageComplete']->fromArray(array(
     'priority' => 0,
     'propertyset' => 0
 ),'',true,true);
+$events['OnManagerPageAfterRender'] = $modx->newObject('modPluginEvent');
+$events['OnManagerPageAfterRender']->fromArray(array(
+    'event' => 'OnManagerPageAfterRender',
+    'priority' => 0,
+    'propertyset' => 0
+),'',true,true);
 
 $plugins[0]->addMany($events);
 

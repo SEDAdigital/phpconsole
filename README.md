@@ -15,7 +15,8 @@ This is a basic JSON configration for your `phpconsole.config` system setting:
             "encryptionPassword": "optional-end-to-end-encryption-password"
         }
     },
-    "backtraceDepth": 3
+    "backtraceDepth": 3,
+    "cookiesAllowed": 1
 }
 ```
 For more information about the configuration please follow the phpconsole docs: https://github.com/phpconsole/phpconsole/blob/master/CONFIGURATION.md

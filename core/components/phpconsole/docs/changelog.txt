@@ -1,4 +1,4 @@
-++ phpconsole 0.4.0
+++ phpconsole 1.0.0
 ++ Released on 2016-03-31
 +++++++++++++++++++++++++
 - added config option to disable cookies and updated to phpconsole 3.5.0
